@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using HandyControl.Data;
 using Color = System.Drawing.Color;
+using FontStyle = System.Drawing.FontStyle;
 
 namespace PictureViewerWidget
 {
@@ -10,19 +11,23 @@ namespace PictureViewerWidget
     {
         private PictureViewerWidgetInstance _instance;
 
-        // overlay state
+        // overlay state — no field initializers that reference ambiguous types
         private Color _bgColor      = Color.Black;
         private Color _overlayColor = Color.White;
-        private Font  _overlayFont  = new Font("Arial", 12, FontStyle.Regular);
-        private int   _overlayXPos  = 0;  // 0=Center 1=Left 2=Right
-        private int   _overlayYPos  = 0;  // 0=Center 1=Top  2=Bottom
+        private Font  _overlayFont;
+        private int   _overlayXPos    = 0;  // 0=Center 1=Left 2=Right
+        private int   _overlayYPos    = 0;  // 0=Center 1=Top  2=Bottom
         private int   _overlayXOffset = 0;
         private int   _overlayYOffset = 0;
-        private bool  _useGlobal    = false;
+        private bool  _useGlobal      = false;
 
         public PictureViewerWidgetSettings(PictureViewerWidgetInstance instance)
         {
             _instance = instance;
+
+            // Safe to use System.Drawing.Font here; FontStyle alias resolves correctly
+            _overlayFont = new Font("Arial", 12, FontStyle.Regular);
+
             InitializeComponent();
             LoadCurrentSettings();
         }
