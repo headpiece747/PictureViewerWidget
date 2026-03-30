@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace PictureViewerWidget
@@ -9,45 +9,51 @@ namespace PictureViewerWidget
 
         public PictureViewerWidgetSettings(PictureViewerWidgetInstance instance)
         {
-            InitializeComponent();
             _instance = instance;
+            InitializeComponent();
             LoadCurrentSettings();
         }
 
         private void LoadCurrentSettings()
         {
-            // Now routing through _instance.WidgetObject.WidgetManager
             if (_instance.WidgetObject.WidgetManager != null &&
                 _instance.WidgetObject.WidgetManager.LoadSetting(_instance, "PictureFolderPath", out string path))
             {
-                TxtFolderPath.Text = path;
+                // Show the current folder path as the button label so the user can see it at a glance
+                BtnBrowse.Content = string.IsNullOrWhiteSpace(path) ? "Browse..." : path;
+                BtnBrowse.Tag = path;
+            }
+            else
+            {
+                BtnBrowse.Content = "Browse...";
             }
         }
 
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
-            // Using WinForms FolderBrowserDialog to easily pick a folder
             using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
                 dialog.Description = "Select a folder containing pictures";
+
+                // Pre-select the already-saved folder if one exists
+                string current = BtnBrowse.Tag as string;
+                if (!string.IsNullOrWhiteSpace(current))
+                    dialog.SelectedPath = current;
+
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    TxtFolderPath.Text = dialog.SelectedPath;
+                    string selectedPath = dialog.SelectedPath;
+
+                    BtnBrowse.Content = selectedPath;
+                    BtnBrowse.Tag = selectedPath;
+
+                    // Save immediately (same pattern as ClockWidget)
+                    if (_instance.WidgetObject.WidgetManager != null)
+                    {
+                        _instance.WidgetObject.WidgetManager.StoreSetting(_instance, "PictureFolderPath", selectedPath);
+                        _instance.LoadSettings();
+                    }
                 }
-            }
-        }
-
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
-        {
-            // Now routing through _instance.WidgetObject.WidgetManager
-            if (_instance.WidgetObject.WidgetManager != null)
-            {
-                _instance.WidgetObject.WidgetManager.StoreSetting(_instance, "PictureFolderPath", TxtFolderPath.Text);
-
-                // Tell the instance to reload the image list from the new folder
-                _instance.LoadSettings();
-
-                MessageBox.Show("Settings saved successfully!", "Settings Saved", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }
