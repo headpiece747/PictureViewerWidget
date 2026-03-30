@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
              mc:Ignorable="d"
              d:Background="White"
              d:DesignHeight="400" d:DesignWidth="300" Margin="10, 25">
@@ -115,7 +116,6 @@
         <!-- ═══ ADVANCED OPTIONS ═══ (no slideshow interval) -->
         <Expander Header="Advanced Options" Margin="0,10,0,0">
             <StackPanel>
-                <!-- Overlay X/Y offset -->
                 <Grid Margin="2">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -130,11 +130,11 @@
                     <Label Content="Overlay Offset" FontSize="10"
                            HorizontalAlignment="Stretch" Grid.ColumnSpan="4"/>
                     <Label Grid.Row="1" Content="X:" FontSize="10" HorizontalAlignment="Stretch"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="OverlayXOffset"
-                             FontSize="10" TextChanged="OverlayOffset_TextChanged"/>
+                    <hc:NumericUpDown Grid.Row="1" Grid.Column="1" x:Name="OverlayXOffset"
+                                     ValueChanged="OverlayOffset_ValueChanged"/>
                     <Label Grid.Row="1" Grid.Column="2" Content="Y:" FontSize="10" HorizontalAlignment="Stretch"/>
-                    <TextBox Grid.Row="1" Grid.Column="3" x:Name="OverlayYOffset"
-                             FontSize="10" TextChanged="OverlayOffset_TextChanged"/>
+                    <hc:NumericUpDown Grid.Row="1" Grid.Column="3" x:Name="OverlayYOffset"
+                                     ValueChanged="OverlayOffset_ValueChanged"/>
                 </Grid>
             </StackPanel>
         </Expander>

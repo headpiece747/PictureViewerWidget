@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <!-- HandyControl: prefer the NuGet package; fall back to the WigiDash Manager install -->
     <Reference Include="HandyControl">
-      <HintPath>..\..\..\Program Files (x86)\G.SKILL\WigiDash Manager\HandyControl.dll</HintPath>
+      <HintPath>packages\HandyControls.3.5.3\lib\net472\HandyControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -46,11 +47,9 @@
     <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
       <Private>True</Private>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.InteropServices, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Runtime.InteropServices.4.3.0\lib\net463\System.Runtime.InteropServices.dll</HintPath>
-      <Private>True</Private>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
