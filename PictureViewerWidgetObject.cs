@@ -14,7 +14,25 @@ namespace PictureViewerWidget
         public string Author      => "headpiece747";
         public string Website     => "https://eclipticsight.com";
         public string Description => "Click to cycle through pictures in a folder.";
-        public Version    Version   => Assembly.GetExecutingAssembly().GetName().Version;
+
+        // Assembly.GetName().Version is always 4-part (e.g. 1.0.0.0).
+        // Trim trailing .0 segments so the display matches the 3-part
+        // version set in AssemblyInfo.cs (e.g. 1.0.0).
+        public Version Version
+        {
+            get
+            {
+                var v = Assembly.GetExecutingAssembly().GetName().Version;
+                if (v == null) return new Version(1, 0, 0);
+
+                if (v.Revision != 0)
+                    return new Version(v.Major, v.Minor, v.Build, v.Revision);
+                if (v.Build != 0)
+                    return new Version(v.Major, v.Minor, v.Build);
+                return new Version(v.Major, v.Minor);
+            }
+        }
+
         public SdkVersion TargetSdk => WidgetUtility.CurrentSdkVersion;
 
         public List<WidgetSize> SupportedSizes => new List<WidgetSize>
@@ -31,11 +49,10 @@ namespace PictureViewerWidget
         // Cached once; disposed in Unload()
         private Bitmap _previewImage;
 
-        // Both properties share the same cached instance
-        public Bitmap PreviewImage   => EnsurePreview();
-        public Bitmap WidgetThumbnail => EnsurePreview();
-
-        public Bitmap GetWidgetPreview(WidgetSize widgetSize) => EnsurePreview();
+        // All three properties share the same cached instance
+        public Bitmap PreviewImage                   => EnsurePreview();
+        public Bitmap WidgetThumbnail                => EnsurePreview();
+        public Bitmap GetWidgetPreview(WidgetSize _) => EnsurePreview();
 
         private Bitmap EnsurePreview()
         {
@@ -49,7 +66,7 @@ namespace PictureViewerWidget
 
         public bool RemoveWidgetInstance(Guid instanceGuid) => true;
 
-        public WidgetError Load(string resourcePath)   => WidgetError.NO_ERROR;
+        public WidgetError Load(string resourcePath) => WidgetError.NO_ERROR;
 
         public WidgetError Unload()
         {
